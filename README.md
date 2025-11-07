@@ -8,7 +8,7 @@ The tool facilitates the training of three different neural network architecture
 
 The tool may be used to produce up to 25-year predictions for forest variables: tree height (H), stem diameter (D), basal area (BA), stem volume (V), and the carbon balance variables: net primary production (npp), gross primary production per tree layer (GPPtrees), net ecosystem exchange (NEP) and gross growth (GGR) to train the machine learning models. The predictions are available for species-wise variables (three species): pine, spruce (spr), and broadleaved (bl) species (e.g. H_pine, H_spr, H_bl; i.e. no variables for totals).<br>
 
-The data set for the model training and evaluation contains forest variable data from 28,666 field inventory plots in continental Finland that were used as the initial state of the sites to be simulated. These data were provided by The Finnish Forest Centre (FFC). Two additional separate data sets contain aggregated (yearly and monthly) climate data downloaded from Copernicus Climate Data Store (CDS) to provide realistic climate scenarios.
+The data set for the model training and evaluation contains forest variable data from 29,619 field inventory plots in continental Finland that were used as the initial state of the sites to be simulated. These data were provided by The Finnish Forest Centre (FFC). Two additional separate data sets contain aggregated (yearly and monthly) climate data downloaded from Copernicus Climate Data Store (CDS) to provide realistic climate scenarios.
 
 Data origins:
 
