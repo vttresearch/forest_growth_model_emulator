@@ -1,0 +1,165 @@
+parameterTypeFile=/scratch/project_2005486/heikki/Code/seq2seq_parameterTypes.txt
+
+prebasDataFile = /scratch/project_2005486/heikki/Data/prebasdata_v4_0_subSet_1e_imp_setLabel.csv
+climdataFile = /scratch/project_2005486/heikki/Data/WEATHER_3_1_hadgem3_gc31_ll_2020_2100_20240205_YMD_grSum_M_norm.csv
+outPath = /scratch/project_2005486/heikki/Models
+
+#modelType = S2S
+#modelType = XFORMER
+modelType = FC_RNN
+
+testDefStr = 1
+rnn_type = GRU
+#rnn_type = LSTM
+
+# The cascade modelling mode enables of producing a hierarchical [parent] - [sub-model]
+# structure, in order to (presumably) achieve better accuracy for the carbon balance
+# variable predictions.
+#
+# The 'cascadeTgtVars' are the variables that will be used as target variables of the 
+# cascade model (i.e. the sub-model of the current model). If these variables have been
+# defined, then they will be added to the output training, validation and test data sets
+# (saved as *.csv files), so that these *.csv files can be used as input data for training
+# the sub-model, and the 'cascadeTgtVars' as the target variables. So this mechanism is
+# only for saving the desired variables into the output text files.
+#
+# The 'cascadeInputVars' are the estimates produced by the parent model, and will be used
+# as additional (time series) inputs for producing the cascade model (= sub-model).
+
+cascadeTgtVars = npp_pine npp_spr npp_bl
+cascadeInputVars =
+
+input_dim_enc = 96
+hid_dim_enc = 64
+n_layers_enc = 2
+dropout_enc = 0.2
+
+# For Transformer (xFormer) model only:
+d_model_tf = 144
+nhead_tf = 6
+hid_dim_tf = 128
+nlayers_tf = 2
+dropout_tf = 0.1
+
+# For [FC]>[RNN] (FC_RNN_Model) model only: 
+# the maximum number of layers to which the fully connected block's
+# outputs are provided (into RNN h0 / c0 inputs):
+n_layers_fc2h0 = 3
+
+# siteInfo parameters: 8
+# forest variables: 12
+# The next parameter is not actually used; replaced by len(inputVarFcCols)
+inp_dim_fc = 23
+
+# Number of fully connected MLP hidden layers (including output layer):
+# Note (S2S model only): that the number of neurons in the fully connected
+# block's output layer must be integer divisable with the number of layers
+# in the decoder (& encoder), as the FC block's outputs will be split into
+# decoder's different layers' hidden inputs (& cell inputs with LSTM):
+nr_hid_fc = 1
+fc_in_sizes = 24
+dropout_fc = 0.2
+
+# For [FC]>[RNN]>[FC] model only (last layer size must equal the number of output variables):
+fc_out_sizes = 256 32 3
+
+# When making model for one variable at a time, the output dimension is 1 (this is derived
+# from the nbr of target variables, i.e. not used)
+output_dim_dec = 3
+dropout_dec = 0.2
+teacher_forcing_ratio = 0.5
+
+combineTrainValidSets = 0
+useValidSetInTraining = 1
+
+normalizeTgtData = 1
+replaceNans = -10.0
+verbose = 0
+
+#inputVarFcCols = age_pine age_spr age_bl H_pine H_spr H_bl D_pine D_spr D_bl BA_pine BA_spr BA_bl siteType
+inputVarFcCols = age_pine age_spr age_bl H_pine H_spr H_bl D_pine D_spr D_bl BA_pine BA_spr BA_bl siteType SWinit CWinit SOGinit Sinit soildepth effFieldCap permWiltPoint exst_pine exst_spr exst_bl
+
+# ---------------------------------------------------------------------
+# Instead of listing all target variable strings for nYears, just list
+# one name for each variable without the year specification. The program 
+# code expands the names for all years 1 - 25:
+
+targetVars = H_pine H_spr H_bl D_pine D_spr D_bl BA_pine BA_spr BA_bl
+metaDataCols = siteID climID_orig scenario year_start year_end H_pine_err H_spr_err H_bl_err
+climDataCols = PAR_mean TAir_mean Precip_mean VPD_mean CO2_mean TAir_std Precip_std VPD_std
+#climDataCols = PAR_mean TAir_mean Precip_mean VPD_mean CO2_mean
+# ---------------------------------------------------------------------
+
+nYears = 25
+
+saveRefDataSets = 1
+RMSEp_healthLimit = 150.0
+
+# The filter strings define 1 - N filters of the form: 'filtervariable rule'
+# separated with semicolon ';':
+#
+# filtervariable = the feature matrix variable header (must exist)
+# rule = the filtering rule defining the feature matrix cases that will be selected
+#
+# The rules are applied consequently advancing from the beginning of the filter string.
+# The rules will apply and 'AND' type combination, i.e. the semicolons might be replaced 
+# with 'and'. It is possible to provide also 'OR' type combination (see example below).
+# The fileter rules defined with 'filters_all' are always applied first.
+#
+# NOTE: The three filter variables for trainingSet, validSet and testSet MUST contain
+# the filters to separate the three sets. In other words, the feature matrix must 
+# contain a variable (here: setLabel) that has individual labels for each of these sets.
+#
+# --------------------------------------------------------------------------------------
+# Do not change the filters_all definition:
+filters_all = setLabel<4
+
+filters_trainingSet = runID < 18000; H_pine_err > 0.0005; H_spr_err > 0.0005; H_bl_err > 0.0005
+
+filters_testSet = runID < 18000; H_pine_err > 0.0005; H_spr_err > 0.0005; H_bl_err > 0.0005
+
+filters_validSet = 
+
+# Number of training/evaluation iterations in wrapper:
+nrIterations = 10
+nrIterationsParamSearch = 3
+nrIterationsModelTrain = 5
+
+verbose = 0
+
+# =========================================================================
+# Optionally define custom loss function (CustomLoss, CustomLoss_perCase, CustomLoss_perYear), and 
+# define the corresponding parameters:
+loss_function = CustomLoss_perYear
+rmseFactor = 1.0
+biasFactor = 1.0
+r2limit = 0.5
+
+# =========================================================================
+learning_rate = 0.0005
+train_epochs=30
+useEarlyStopping = 1
+min_delta = 0.002
+patience = 4
+beta_1 = 0.9
+beta_2 = 0.999
+batchSize = 64
+L2 = 0.15
+dropout=0.0
+batchnorm=0
+activation_hidden = relu
+activation_output = relu
+clip_grad = 0.5
+
+
+# Hyper-parameter sets for tuning:
+learning_rates = 0.0002 0.0005 0.001
+batchSizes = 4 8
+# Note: If 'useEarlyStopping = 0', several numbers of epochs may be needed:
+nrEpochss = 250
+L2s = 0.02
+
+
+
+
+

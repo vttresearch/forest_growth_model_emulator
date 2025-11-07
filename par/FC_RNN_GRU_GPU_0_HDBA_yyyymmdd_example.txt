@@ -1,0 +1,364 @@
+# ======================================================================================
+# This file shows an example of parameter file for training and evaluating a Pytorch
+# model to emulate the operation of a process based forest growth model Prebasso
+# (A. Mäkelä, “A Carbon Balance Model of Growth and Self-Pruning in Trees Based on 
+# Structural Relationships”, For. Sci., vol. 43, no. 1, pp. 7–24, Feb. 1997, 
+# doi: 10.1093/forestscience/43.1.7.)
+#
+# The file format conventions are:
+# Comments: all rows that start with a hashtag (#) are read as comments
+# Parameters: The parameter definition is declared as 'name = value' rows (one row
+# per parameter). All the parameters and their types have been pre-defined in the
+# parameter type file (parameterTypeFile) defined below. Possible parameter types
+# are: int, float, str, boolean, intList, floatList, stringList. The values of the
+# list parameters are to be separated with white space. The boolean values are 0 (False)
+# and 1 (True).
+# ======================================================================================
+
+
+# ======================================================================================
+# File path definitions:
+#
+# NOTE: This is a Linux example. The path definition strings are of different format in
+# Windows system. 
+#
+# NOTE: Remember to use backlash as separator when defining Windows paths:
+# parameterTypeFile=C:\PROJECTS\path_spec\seq2seq_parameterTypes.txt
+# --------------------------------------------------------------------------------------
+# File path definition (path + filename) of parameter type file:
+parameterTypeFile=/scratch/project_xxxx/Code/seq2seq_parameterTypes.txt
+
+# File path (path + filename) definitions of input data sets:
+prebasDataFile = /scratch/project_xxxx/Data/prebasdata_v4_0_subSet_1e_imp_setLabel.csv
+
+# Climate data file / yearly aggregates:
+climdataFile = /scratch/project_xxxx/Data/WEATHER_3_1_hadgem3_gc31_ll_2020_2100_20240205_YMD_grSum_Y_norm.csv
+# Climate data file / monthly aggregates:
+#climdataFile = /scratch/project_xxxx/Data/WEATHER_3_1_hadgem3_gc31_ll_2020_2100_20240205_YMD_grSum_M_norm.csv
+
+# Definition of output path for results (model + associated result files):
+outPath = /scratch/project_xxxx/Models
+
+# Optional model identifier string (will be added to moutput model name):
+testDefStr = 0
+
+# ======================================================================================
+# Model type and model buolding units (GRU/LSTM)
+# --------------------------------------------------------------------------------------
+# Definition of model type (uncomment the desired model type; will be added to moutput model name):
+#modelType = S2S
+#modelType = XFORMER
+modelType = FC_RNN
+
+# Model building block definition (not applicable to XFORMER; will be added to moutput model name):
+rnn_type = GRU
+#rnn_type = LSTM
+
+
+# ======================================================================================
+# Model definition parameters (FC_RNN % S2S models): encoder input dimension, encoder hidden,
+# dimension, number of encoder layers, and encoder dropout factor. The encoder input dimension
+# is the number of climate data variables included (nbr of climate data columns; climDataCols, 
+# see below) times the number of yearly climate data records. 
+#
+# The two climate data sets are:
+# Yearly: WEATHER_3_1_hadgem3_gc31_ll_2020_2100_20240205_YMD_grSum_Y_norm.csv - Nbr of records/year = 1
+# Monthly: WEATHER_3_1_hadgem3_gc31_ll_2020_2100_20240205_YMD_grSum_M_norm.csv - Nbr of records/year = 12
+#
+# For instance, with 12 clomate data columns included, and with monthly climate data set the
+# encoder input dimension is: input_dim_enc = 8 x 12 = 96
+# --------------------------------------------------------------------------------------
+
+# FC_RNN & S2S input dimension with yearly climate data:
+input_dim_enc = 12
+# FC_RNN & S2S input dimension with monthly climate data:
+#input_dim_enc = 96
+
+hid_dim_enc = 64
+n_layers_enc = 2
+dropout_enc = 0.2
+
+# Decoder output dimension (when making model for one variable at a time, the output dimension is 1)
+# (this is derived in the code from the nbr of target variables, i.e. not used; ignore)
+output_dim_dec = 3
+
+# Decoder dropout factor (S2S models only):
+dropout_dec = 0.2
+
+# Decoder teacher forcing ratio (for S2S model only):
+teacher_forcing_ratio = 0.5
+
+# The maximum number of layers to which the fully connected block's
+# outputs are provided (into RNN h0 / c0 inputs). FC_RNN_Model) model only: 
+n_layers_fc2h0 = 3
+
+# The next parameter is not used; replaced by len(inputVarFcCols) in code
+inp_dim_fc = 23
+
+
+# ======================================================================================
+# Model definition parameters for Transformer (XFORMER) model only. 
+# The Transformer input dimension (d_model_tf) is the number of climate
+# data variables included (nbr of climate data columns; climDataCols, 
+# see below) times the number of yearly climate data records (as for 
+# parameter input_dim_enc above):
+# --------------------------------------------------------------------------------------
+
+# Transformer input dimension with yearly climate data:
+d_model_tf = 12
+# Transformer input dimension with monthly climate data:
+d_model_tf = 96
+
+nhead_tf = 6
+hid_dim_tf = 128
+nlayers_tf = 2
+dropout_tf = 0.1
+
+
+# ======================================================================================
+# Fully connected block definitions:
+#
+# nr_hid_fc = Number of fully connected MLP hidden layers (including output layer):
+# fc_in_sizes = Number of neurons (hidden an otput layers only; input layer will be 
+# covered prgrammatically)
+#
+# Note (S2S model only): that the number of neurons in the fully connected
+# block's output layer must be integer divisable with the number of layers
+# in the decoder (& encoder), as the FC block's outputs will be split into
+# decoder's different layers' hidden inputs (& cell inputs with LSTM):
+# --------------------------------------------------------------------------------------
+nr_hid_fc = 2
+# The sizes (number of neurons) of the hidden layers:
+fc_in_sizes = 26 24
+# The fully connected section's dropout factor:
+dropout_fc = 0.2
+
+
+# ======================================================================================
+# [FC]>[RNN]>[FC] not used (ignore):
+# For [FC]>[RNN]>[FC] model only (last layer size must equal the number of output variables):
+fc_out_sizes = 256 32 3
+
+
+# ======================================================================================
+# Definition of input variable columns (in prebasDataFile). Typically all forest variables 
+# (age, H, D, and BA for all species) are used, as well as siteType. In addition, the site 
+# info variables (SWinit CWinit SOGinit Sinit soildepth effFieldCap permWiltPoint) should 
+# be included. Including the variablesexst_pine exst_spr exst_bl may improve the model
+# performance for missing species cases.
+# --------------------------------------------------------------------------------------
+# Default:
+inputVarFcCols = age_pine age_spr age_bl H_pine H_spr H_bl D_pine D_spr D_bl BA_pine BA_spr BA_bl siteType SWinit CWinit SOGinit Sinit soildepth effFieldCap permWiltPoint exst_pine exst_spr exst_bl
+
+#inputVarFcCols = age_pine age_spr age_bl H_pine H_spr H_bl D_pine D_spr D_bl BA_pine BA_spr BA_bl siteType
+
+
+# ======================================================================================
+# Definition of target variables and metadata variables (in prebasDataFile):
+# 
+# Target (thematic) variables: 
+# H_xxx = tree height
+# D_xxx = stem diameter
+# BA_xxx = basal area
+# V_xxx = stem volume
+# npp_xxx = net primary production
+# GPPtrees_xxx = gros primary production of tree layer
+# NEPxxx = Net ecosystem exchange
+# GGrowth_xxx = Gross growth
+#
+# NOTE: the string xxx must be replaced with one of: [pine, spr, bl]. Typically for each
+# thematic variable all three species variables will be specified, e.g.: H_pine, H_spr, H_bl
+#
+# NOTE2: Instead of listing all target variable strings for nYears, just list
+# one name for each variable without the year specification. The program 
+# code expands the names for all years 1 - 25:
+# --------------------------------------------------------------------------------------
+targetVars = H_pine H_spr H_bl D_pine D_spr D_bl BA_pine BA_spr BA_bl
+
+# The metadata columns to be included in the result files (do not edit):
+metaDataCols = siteID climID_orig scenario year_start year_end H_pine_err H_spr_err H_bl_err
+
+
+# ======================================================================================
+# Definition of climate data variables and metadata variables (in climdataFile):
+#
+# The climate data to be included as model (time series) inputs (see also the parameter
+# input_dim_enc above): 
+# --------------------------------------------------------------------------------------
+climDataCols = PAR_mean TAir_mean Precip_mean VPD_mean CO2_mean TAir_std Precip_std VPD_std
+#climDataCols = PAR_mean TAir_mean Precip_mean VPD_mean CO2_mean
+
+
+# ======================================================================================
+# Training data set filters:
+#
+# The filters defined here will be applied to the training data set (prebasDataFile) data
+# (read into Pandas DataFRame) using the Pandas dataframe query (pandas.DataFrame.query) 
+# function iteratively. The filter strings define 1 - N filters of the form: 'filtervariable rule'
+# separated with semicolon ';':
+#
+# filtervariable = the feature matrix variable column header (must exist)
+# rule = the filtering rule defining the feature matrix cases that will be selected
+#
+# The rules are applied consequently advancing from the beginning of the filter string.
+# The rules will apply and 'AND' type combination, i.e. the semicolons might be replaced 
+# with 'and'. It is possible to provide also 'OR' type combination (see example below).
+# The fileter rules defined with 'filters_all' are always applied first.
+#
+# NOTE 1: The filter separating the training, validation and test sets will be added
+# as the first filter string by the code that generates the different sets. I.e. the
+# string 'setLabel == X' (where X = 1, 2 or 3 for training, validation and test sets 
+# correspondingly) will be added to the original filter strings defined below. The
+# name 'setLabel' for selecting the different sets is hard-coded in this implementation,
+# and thus the column with this header must exist in the training data set file.
+#
+# NOTE 2: The filters defined by 'filters_trainingSet' will be applied for both training
+# (setLabel = 1) and validation (setLabel = 2) sets. This is also hard-coded in this
+# implementation.
+#
+# Examples:
+#
+# 1. Restrict the amount ofdata used for moel deveopment:
+# 
+# filters_trainingSet = runID < 18000
+#
+# applicable values are e.g.:
+# 	runID < 12000		# 31.9% of all data used
+# 	runID < 15000		# 53.5% of all data used
+# 	runID < 18000		# 79.6% of all data used
+# 	runID < 20000		# 100% of all data used
+#
+# NOTE: Always include the filter strings: H_pine_err > 0.0005; H_spr_err > 0.0005; H_bl_err > 0.0005
+# These will remove data lines (vectors) with erroneous PREBASSO predictions fro the data set.
+#
+# --------------------------------------------------------------------------------------
+# Do not change the filters_all definition:
+filters_all = setLabel<4
+
+filters_trainingSet = runID < 18000; H_pine_err > 0.0005; H_spr_err > 0.0005; H_bl_err > 0.0005
+
+filters_testSet = runID < 18000; H_pine_err > 0.0005; H_spr_err > 0.0005; H_bl_err > 0.0005
+
+# For valid set the filter definition must be left empty (the same filter applied as
+# for training set):
+filters_validSet = 
+
+
+# ======================================================================================
+# Custom loss function:
+# Optionally define custom loss function (CustomLoss, CustomLoss_perCase, CustomLoss_perYear),
+# and define the corresponding parameters (default = CustomLoss_perYear). If no custom loss
+# will be specified, then the loss function nn.MSELoss() will be applied. In this case the
+# parameters rmseFactor, biasFactor, and r2limit have no effect:
+# --------------------------------------------------------------------------------------
+loss_function = CustomLoss_perYear
+rmseFactor = 1.0
+biasFactor = 1.0
+r2limit = 0.5
+
+
+# ======================================================================================
+# Model training process parameters:
+# --------------------------------------------------------------------------------------
+# Number of years to predict (do not change this):
+nYears = 25
+
+# A flag to combine/not combine the training and validation sets into a single set.
+# 0 = do not combine, 1 = combine (default = 0):
+combineTrainValidSets = 0
+
+# A flag to indicate if valid set is to be used in training (default = 1 = use valid set):
+useValidSetInTraining = 1
+
+# A flag for normalizing/not normalizing the target data set (default = 1 = normalize):
+normalizeTgtData = 1
+
+# The value to replace the NaN's with. This affects the field plots with missing species
+# data. NOTE: If the input data set prebasdata_v4_0_subSet_1e_imp_setLabel.csv is use, then
+# this parameter has no effect, as the missing data has been imputed already in the data set
+# (as described in the ARTISDIG project manuscript):
+replaceNans = 0
+
+# Number of training/evaluation iterations in wrapper:
+nrIterations = 10
+nrIterationsParamSearch = 3
+nrIterationsModelTrain = 5
+
+# A flag to save(not save the reference data sets (training, validation, test) 
+# in training process (default = 1 = save):
+saveRefDataSets = 1
+
+# A flag to use verbose code execution or not (default = 0):
+verbose = 0
+
+# The upper limit for validation set relative RMSE value (not used?):
+RMSEp_healthLimit = 150.0
+
+
+# ======================================================================================
+# Training parameters (for artisTrain.py):
+# --------------------------------------------------------------------------------------
+learning_rate = 0.0005
+train_epochs=30
+useEarlyStopping = 1
+min_delta = 0.002
+patience = 4
+beta_1 = 0.9
+beta_2 = 0.999
+batchSize = 64
+L2 = 0.15
+dropout=0.0
+batchnorm=0
+activation_hidden = relu
+activation_output = relu
+clip_grad = 0.5
+
+
+# ======================================================================================
+# Hyper-parameter sets for tuning (for artisTrainWrapper.py):
+# --------------------------------------------------------------------------------------
+modelTypes = FC_RNN
+rnnTypes = GRU
+nrEncLayerss = 4
+encHidDimss = 64 128
+nrFc2h0Layerss = 4
+# nr_hid_fc will be set as one of the items in nrFcHidLrs at a time:
+nrFcHidLrs = 2
+
+learningRates = 0.0005 0.0007 0.001
+batchSizes = 128 256 512
+encDropouts = 0.2
+fcDropouts = 0.2
+
+# Note: If 'useEarlyStopping = 0', several numbers of epochs may be needed:
+nrEpochss = 250
+L2s = 0.02
+
+
+# ======================================================================================
+# Cascade modelling (not used; ignore)
+# The cascade modelling mode enables of producing a hierarchical [parent] - [sub-model]
+# structure, in order to (presumably) achieve better accuracy for the carbon balance
+# variable predictions.
+#
+# The 'cascadeTgtVars' are the variables that will be used as target variables of the 
+# cascade model (i.e. the sub-model of the current model). If these variables have been
+# defined, then they will be added to the output training, validation and test data sets
+# (saved as *.csv files), so that these *.csv files can be used as input data for training
+# the sub-model, and the 'cascadeTgtVars' as the target variables. So this mechanism is
+# only for saving the desired variables into the output text files.
+#
+# The 'cascadeInputVars' are the estimates produced by the parent model, and will be used
+# as additional (time series) inputs for producing the cascade model (= sub-model).
+# --------------------------------------------------------------------------------------
+cascadeTgtVars = npp_pine npp_spr npp_bl
+cascadeInputVars =
+
+
+
+
+
+
+
+
+
