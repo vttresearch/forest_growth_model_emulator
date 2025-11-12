@@ -38,7 +38,7 @@ The fully connected block's outputs are connected to the RNN hidden state (and c
 <img src="img/FC_RNN_model_20251106.png" alt="Drawing" style="width: 600px;"/>
 <br>
 
-GRU = Gated Recurrent Unit, LSTM = Long short-970 term memory, PAR = photosynthe􀆟cally ac􀆟ve radia􀆟on, TAir = daily temperature, Precip = precipita􀆟on, VPD = vapour 971 pressure deficit, CO2 = carbon dioxide, h0 = hidden state vector, c0 = cell state vector
+GRU = Gated Recurrent Unit, LSTM = Long short-term memory, PAR = photosynthetically active radiation, TAir = daily temperature, Precip = precipita􀆟on, VPD = vapour 971 pressure deficit, CO2 = carbon dioxide, h0 = hidden state vector, c0 = cell state vector
 
 ***
 #### iI) The seq2seq model (S2S)
