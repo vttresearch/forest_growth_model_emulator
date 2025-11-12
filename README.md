@@ -38,7 +38,7 @@ The fully connected block's outputs are connected to the RNN hidden state (and c
 <img src="img/FC_RNN_model_20251106.png" alt="Drawing" style="width: 600px;"/>
 <br>
 
-GRU = Gated Recurrent Unit, LSTM = Long short-term memory, PAR = photosynthetically active radiation, TAir = daily temperature, Precip = precipita􀆟on, VPD = vapour 971 pressure deficit, CO2 = carbon dioxide, h0 = hidden state vector, c0 = cell state vector
+GRU = Gated Recurrent Unit, LSTM = Long short-term memory, PAR = photosynthetically active radiation, TAir = daily temperature, Precip = precipitation, VPD = vapour pressure deficit, CO2 = carbon dioxide, h0 = hidden state vector, c0 = cell state vector
 
 ***
 #### iI) The seq2seq model (S2S)
@@ -58,6 +58,8 @@ the RNN hidden state inputs (h0). If the nuber of the encoder layers > 1, the fu
 
 <img src="img/S2S_model_20251106.png" alt="Drawing" style="width: 800px;"/>
 <br>
+
+GRU = Gated Recurrent Unit, LSTM = Long short-term memory, PAR = photosynthetically active radiation, TAir = daily temperature, Precip = precipitation, VPD = vapour pressure deficit, CO2 = carbon dioxide, h0 = hidden state vector, c0 = cell state vector
 
 ***
 #### iii) Vanilla transformer encoder model (TXFORMER)
