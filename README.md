@@ -40,6 +40,7 @@ The fully connected block's outputs are connected to the RNN hidden state (and c
 
 GRU = Gated Recurrent Unit, LSTM = Long short-term memory, PAR = photosynthetically active radiation, TAir = daily temperature, Precip = precipitation, VPD = vapour pressure deficit, CO2 = carbon dioxide, h0 = hidden state vector, c0 = cell state vector
 
+The dashed arrows in the Figure above depict the optional copy of the dense layer outputs to the initial hidden (and cell) state vectors h0, c0 of the RNN encoder.
 ***
 #### iI) The seq2seq model (S2S)
 
