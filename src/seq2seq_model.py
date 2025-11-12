@@ -1171,7 +1171,7 @@ def initModel(paramDict, verbose = True):
 
 	# Decoder output dimension (number of predicted variables).
 	# Note: This input applies alos to FC_RNN_Model.
-	output_dim_dec = len(paramDict['targetVars'])
+	output_dim = len(paramDict['targetVars'])
 
 	device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
@@ -1192,7 +1192,7 @@ def initModel(paramDict, verbose = True):
 			}
 		
 		# The input dimension is the same as the output dimension (nbr of target variables)
-		inp_dim_dec = output_dim_dec
+		inp_dim_dec = output_dim
 
 		# The encoder hidden state and the fully connected block's output layer
 		# will be concatenated and fed into the first hidden state (h0, c0) of 
@@ -1209,7 +1209,7 @@ def initModel(paramDict, verbose = True):
 			print("hid_dim_dec = ", hid_dim_dec)
 		
 		comb = Combined(enc_params, fc_params)
-		dec = Decoder(output_dim_dec, inp_dim_dec, hid_dim_dec, n_layers_dec, dropout_dec, rnn_type=rnn_type)
+		dec = Decoder(output_dim, inp_dim_dec, hid_dim_dec, n_layers_dec, dropout_dec, rnn_type=rnn_type)
 
 		# Initialize the model:
 		model = Seq2Seq(comb, dec, device).to(device)
@@ -1236,7 +1236,7 @@ def initModel(paramDict, verbose = True):
 			'n_layers_rnn': n_layers_enc,
 			'n_layers_fc2h0': n_layers_fc2h0,
 			'dropout_rnn': dropout_enc,
-			'output_dim': output_dim_dec,
+			'output_dim': output_dim,
 			'rnn_type': rnn_type,
 			'inp_dim_fc': inp_dim_fc,
 			'fc_in_sizes': fc_in_sizes,
@@ -1263,7 +1263,7 @@ def initModel(paramDict, verbose = True):
 		d_model_tf = paramDict['d_model_tf'] + nrCascadevars
 
 		tfParams = {
-			'output_dim_tf': output_dim_dec, 
+			'output_dim_tf': output_dim, 
 			'd_model_tf': d_model_tf,
 			'nhead_tf': paramDict['nhead_tf'],
 			'hid_dim_tf': paramDict['hid_dim_tf'],
@@ -1297,7 +1297,7 @@ def initModel(paramDict, verbose = True):
 			'n_layers_rnn': n_layers_enc,
 			'n_layers_fc2h0': n_layers_fc2h0,
 			'dropout_rnn': dropout_enc,
-			'output_dim': output_dim_dec,
+			'output_dim': output_dim,
 			'rnn_type': rnn_type,
 			'inp_dim_fc': inp_dim_fc,
 			'fc_in_sizes': fc_in_sizes,

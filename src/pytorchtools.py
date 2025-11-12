@@ -709,8 +709,10 @@ class Art_Dataset(Dataset):
 		# Then transpose to switch the dimensions to dim = [trg_len, trg_dim]
 		thisTargetData = thisTargetData.T
 
-		# Then add the batch dimension (second dim; axis = 1) to have dim = [trg_len, batch_size, trg_dim]
+		# Assign thisTargetData to targetData directly to have dim = [batch_size, trg_len, trg_dim]
 		targetData = thisTargetData
+		# Then add the batch dimension (second dim; axis = 1) to have dim = [trg_len, batch_size, trg_dim]
+		#targetData = np.expand_dims(thisTargetData, axis=1)
 
 		dataItem = {
 			'inputDataEnc': encoderInput,
