@@ -72,7 +72,7 @@ This net architecture is arealization of the vanilla transformer (Vaswani et al.
     
 </div>
 
-<img src="img/TXFORMER_model_20251106.png" alt="Drawing" style="width: 400px;"/>
+<img src="img/TXFORMER_model_20251106.png" alt="Drawing" style="width: 300px;"/>
 
 
 
