@@ -107,7 +107,7 @@ inp_dim_fc = 23
 # Transformer input dimension with yearly climate data:
 d_model_tf = 12
 # Transformer input dimension with monthly climate data:
-d_model_tf = 96
+#d_model_tf = 96
 
 nhead_tf = 6
 hid_dim_tf = 128
@@ -128,7 +128,7 @@ dropout_tf = 0.1
 # decoder's different layers' hidden inputs (& cell inputs with LSTM):
 # --------------------------------------------------------------------------------------
 nr_hid_fc = 2
-# The sizes (number of neurons) of the hidden layers:
+# The sizes (number of neurons) of the hidden & output layers:
 fc_in_sizes = 26 24
 # The fully connected section's dropout factor:
 dropout_fc = 0.2
@@ -228,16 +228,13 @@ climDataCols = PAR_mean TAir_mean Precip_mean VPD_mean CO2_mean TAir_std Precip_
 # 	runID < 18000		# 79.6% of all data used
 # 	runID < 20000		# 100% of all data used
 #
-# NOTE: Always include the filter strings: H_pine_err > 0.0005; H_spr_err > 0.0005; H_bl_err > 0.0005
-# These will remove data lines (vectors) with erroneous PREBASSO predictions fro the data set.
-#
 # --------------------------------------------------------------------------------------
 # Do not change the filters_all definition:
 filters_all = setLabel<4
 
-filters_trainingSet = runID < 18000; H_pine_err > 0.0005; H_spr_err > 0.0005; H_bl_err > 0.0005
+filters_trainingSet = runID < 18000
 
-filters_testSet = runID < 18000; H_pine_err > 0.0005; H_spr_err > 0.0005; H_bl_err > 0.0005
+filters_testSet = runID < 18000
 
 # For valid set the filter definition must be left empty (the same filter applied as
 # for training set):
@@ -252,6 +249,7 @@ filters_validSet =
 # parameters rmseFactor, biasFactor, and r2limit have no effect:
 # --------------------------------------------------------------------------------------
 loss_function = CustomLoss_perYear
+#loss_function = 
 rmseFactor = 1.0
 biasFactor = 1.0
 r2limit = 0.5
@@ -284,7 +282,7 @@ nrIterations = 10
 nrIterationsParamSearch = 3
 nrIterationsModelTrain = 5
 
-# A flag to save(not save the reference data sets (training, validation, test) 
+# A flag to save/not save the reference data sets (training, validation, test) 
 # in training process (default = 1 = save):
 saveRefDataSets = 1
 
