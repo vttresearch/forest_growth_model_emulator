@@ -135,12 +135,6 @@ dropout_fc = 0.2
 
 
 # ======================================================================================
-# [FC]>[RNN]>[FC] not used (ignore):
-# For [FC]>[RNN]>[FC] model only (last layer size must equal the number of output variables):
-fc_out_sizes = 256 32 3
-
-
-# ======================================================================================
 # Definition of input variable columns (in prebasDataFile). Typically all forest variables 
 # (age, H, D, and BA for all species) are used, as well as siteType. In addition, the site 
 # info variables (SWinit CWinit SOGinit Sinit soildepth effFieldCap permWiltPoint) should 

@@ -1,8 +1,16 @@
-parameterTypeFile=/scratch/project_2005486/heikki/Code/seq2seq_parameterTypes.txt
+# File path definition (path + filename) of parameter type file:
+parameterTypeFile=/scratch/project_xxxx/Code/seq2seq_parameterTypes.txt
 
-prebasDataFile = /scratch/project_2005486/heikki/Data/prebasdata_v4_0_subSet_1e_imp_setLabel.csv
-climdataFile = /scratch/project_2005486/heikki/Data/WEATHER_3_1_hadgem3_gc31_ll_2020_2100_20240205_YMD_grSum_M_norm.csv
-outPath = /scratch/project_2005486/heikki/Models
+# File path (path + filename) definitions of input data sets:
+prebasDataFile = /scratch/project_xxxx/Data/prebasdata_v4_0_subSet_1e_imp_setLabel.csv
+
+# Climate data file / yearly aggregates:
+climdataFile = /scratch/project_xxxx/Data/WEATHER_3_1_hadgem3_gc31_ll_2020_2100_20240205_YMD_grSum_Y_norm.csv
+# Climate data file / monthly aggregates:
+#climdataFile = /scratch/project_xxxx/Data/WEATHER_3_1_hadgem3_gc31_ll_2020_2100_20240205_YMD_grSum_M_norm.csv
+
+# Definition of output path for results (model + associated result files):
+outPath = /scratch/project_xxxx/Models
 
 #modelType = S2S
 #modelType = XFORMER
@@ -11,23 +19,6 @@ modelType = FC_RNN
 testDefStr = 1
 rnn_type = GRU
 #rnn_type = LSTM
-
-# The cascade modelling mode enables of producing a hierarchical [parent] - [sub-model]
-# structure, in order to (presumably) achieve better accuracy for the carbon balance
-# variable predictions.
-#
-# The 'cascadeTgtVars' are the variables that will be used as target variables of the 
-# cascade model (i.e. the sub-model of the current model). If these variables have been
-# defined, then they will be added to the output training, validation and test data sets
-# (saved as *.csv files), so that these *.csv files can be used as input data for training
-# the sub-model, and the 'cascadeTgtVars' as the target variables. So this mechanism is
-# only for saving the desired variables into the output text files.
-#
-# The 'cascadeInputVars' are the estimates produced by the parent model, and will be used
-# as additional (time series) inputs for producing the cascade model (= sub-model).
-
-cascadeTgtVars = npp_pine npp_spr npp_bl
-cascadeInputVars =
 
 input_dim_enc = 96
 hid_dim_enc = 64
@@ -59,9 +50,6 @@ inp_dim_fc = 23
 nr_hid_fc = 1
 fc_in_sizes = 24
 dropout_fc = 0.2
-
-# For [FC]>[RNN]>[FC] model only (last layer size must equal the number of output variables):
-fc_out_sizes = 256 32 3
 
 # When making model for one variable at a time, the output dimension is 1 (this is derived
 # from the nbr of target variables, i.e. not used)
@@ -114,9 +102,9 @@ RMSEp_healthLimit = 150.0
 # Do not change the filters_all definition:
 filters_all = setLabel<4
 
-filters_trainingSet = runID < 18000; H_pine_err > 0.0005; H_spr_err > 0.0005; H_bl_err > 0.0005
+filters_trainingSet = runID < 18000
 
-filters_testSet = runID < 18000; H_pine_err > 0.0005; H_spr_err > 0.0005; H_bl_err > 0.0005
+filters_testSet = runID < 18000
 
 filters_validSet = 
 
