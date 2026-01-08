@@ -10,6 +10,11 @@ The tool may be used to produce up to 25-year predictions for forest variables: 
 
 The data set for the model training and evaluation contains forest variable data from 29,619 field inventory plots in continental Finland that were used as the initial state of the sites to be simulated. These data were provided by The Finnish Forest Centre (FFC). Two additional separate data sets contain aggregated (yearly and monthly) climate data downloaded from Copernicus Climate Data Store (CDS) to provide realistic climate scenarios.
 
+***
+Data repository:
+https://doi.org/10.5281/zenodo.18186624
+
+***
 Data origins:
 
 FFC data:<br>
