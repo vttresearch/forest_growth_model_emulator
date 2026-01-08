@@ -1,3 +1,12 @@
+# ======================================================================================
+# File path definitions:
+#
+# NOTE: This is a Linux example. The path definition strings are of different format in
+# Windows system. 
+#
+# NOTE: Remember to use backlash as separator when defining Windows paths:
+# parameterTypeFile=C:\PROJECTS\path_spec\seq2seq_parameterTypes.txt
+# --------------------------------------------------------------------------------------
 # File path definition (path + filename) of parameter type file:
 parameterTypeFile=/scratch/project_xxxx/Code/seq2seq_parameterTypes.txt
 
