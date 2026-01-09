@@ -34,7 +34,7 @@ GRU = Gated Recurrent Unit, LSTM = Long short-term memory, PAR = photosynthetica
 
 The dashed arrows in the Figure above depict the optional copy of the dense layer outputs to the initial hidden (and cell) state vectors h0, c0 of the RNN encoder.
 ***
-#### iI) The seq2seq model (S2S)
+#### ii) The seq2seq model (S2S)
 
 <div class="alert alert-block alert-warning">
 <b>The seq2seq model architecture contains the modules:</b>
