@@ -11,22 +11,6 @@ The tool may be used to produce up to 25-year predictions for forest variables: 
 The data set for the model training and evaluation contains forest variable data from 29,619 field inventory plots in continental Finland that were used as the initial state of the sites to be simulated. These data were provided by The Finnish Forest Centre (FFC). Two additional separate data sets contain aggregated (yearly and monthly) climate data downloaded from Copernicus Climate Data Store (CDS) to provide realistic climate scenarios.
 
 ***
-## Forest growth model emulator data set
-
-The forest site data (with 25 year rPrebasso predictions) and the climate data files (*.csv) needed in the model training / evaluation may be downloaded from:
-
-https://doi.org/10.5281/zenodo.18186624
-
-***
-Data origins:
-
-FFC data:<br>
-https://www.metsakeskus.fi/fi/avoin-metsa-ja-luontotieto/metsatietoaineistot/metsavaratiedot
-
-CDS climate data:<br>
-https://cds.climate.copernicus.eu/#!/home
-
-***
 ### Network Architectures
 
 Three different network architectures have been defined for the forest variable growth or carbon balance variable prediction task.
@@ -95,6 +79,21 @@ https://github.com/SheezaShabbir/Time-series-Analysis-using-LSTM-RNN-and-GRU/blo
 The Transformer encoder model:<br>
 https://pytorch-tutorials-preview.netlify.app/beginner/transformer_tutorial.html<br>
 
+***
+## Forest growth model emulator data set
+
+The forest site data (with 25 year rPrebasso predictions) and the climate data files (*.csv) needed in the model training / evaluation may be downloaded from:
+
+https://doi.org/10.5281/zenodo.18186624
+
+***
+Data origins:
+
+FFC data:<br>
+https://www.metsakeskus.fi/fi/avoin-metsa-ja-luontotieto/metsatietoaineistot/metsavaratiedot
+
+CDS climate data:<br>
+https://cds.climate.copernicus.eu/#!/home
 
 ***
 ### For the PREBASSO tool, see:
