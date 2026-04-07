@@ -8,7 +8,9 @@ The tool facilitates the training of three different neural network architecture
 
 The tool may be used to produce up to 25-year predictions for forest variables: tree height (H), stem diameter (D), basal area (BA), stem volume (V), and the carbon balance variables: net primary production (npp), gross primary production per tree layer (GPPtrees), net ecosystem exchange (NEP) and gross growth (GGR) to train the machine learning models. The predictions are available for species-wise variables (three species): pine, spruce (spr), and broadleaved (bl) species (e.g. H_pine, H_spr, H_bl; i.e. no variables for totals).<br>
 
-The data set for the model training and evaluation contains forest variable data from 29,619 field inventory plots in continental Finland that were used as the initial state of the sites to be simulated. These data were provided by The Finnish Forest Centre (FFC). Two additional separate data sets contain aggregated (yearly and monthly) climate data downloaded from Copernicus Climate Data Store (CDS) to provide realistic climate scenarios.
+The data set for the model training and evaluation contains forest variable data from 29,619 field inventory plots in continental Finland that were used as the initial state of the sites to be simulated. These data were provided by The Finnish Forest Centre (FFC). Two additional separate data sets contain aggregated (yearly and monthly) climate data downloaded from Copernicus Climate Data Store (CDS) to provide realistic climate scenarios.<br>
+
+A full description of the models and their performance can be found in (Astola et al., 2026).
 
 ***
 ### Network Architectures
@@ -101,6 +103,7 @@ https://github.com/ForModLabUHel/Rprebasso
 
 ***
 #### References:<br>
+Astola, H., Kangas, A., Minunno, F., & Mõttus, M. (2026). Emulating a forest growth and productivity model with deep learning. Silva Fennica, 60(1), Article 25012. https://doi.org/10.14214/sf.25012<br><br>
 Mäkelä, A. (1997). A Carbon Balance Model of Growth and Self-Pruning in Trees Based on Structural Relationships. Forest Science, 43(1), 7–24. https://doi.org/10.1093/forestscience/43.1.7
 <br><br>
 Minunno, F., Peltoniemi, M., Launiainen, S., Aurela, M., Lindroth, A., Lohila, A., Mammarella, I., Minkkinen, K., & Mäkelä, A. (2016). Calibration and validation of a semi-empirical flux ecosystem model for coniferous forests in the Boreal region. Ecological Modelling, 341, 37–52. https://doi.org/10.1016/j.ecolmodel.2016.09.020
